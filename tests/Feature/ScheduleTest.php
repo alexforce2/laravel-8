@@ -89,40 +89,68 @@ class ScheduleTest extends TestCase
             'end_at' => '2019-02-24'
         ]);
 
-        $data = [
-            'title' => 'Спартак',
-            'start_at' => '2019-02-22',
-            'end_at' => '2019-02-28'
+        $headers = [
+            'Content-Type' => 'application/json'
         ];
 
-        $response = $this->json('post', route('schedule.store'), $data, [
-            'Content-Type' => 'application/json'
-        ]);
-
+        $response = $this->json(
+            'post',
+            route('schedule.store'),
+            [
+                'title' => 'Спартак',
+                'start_at' => '2019-02-20',
+                'end_at' => '2019-02-22'
+            ],
+            $headers
+        );
         $response->assertJsonValidationErrors(['start_at']);
 
-        $data = [
-            'title' => 'Спартак',
-            'start_at' => '2019-02-24',
-            'end_at' => '2019-02-28'
-        ];
-
-        $response = $this->json('post', route('schedule.store'), $data, [
-            'Content-Type' => 'application/json'
-        ]);
-
+        $response = $this->json(
+            'post',
+            route('schedule.store'),
+            [
+                'title' => 'Спартак',
+                'start_at' => '2019-02-22',
+                'end_at' => '2019-02-28'
+            ],
+            $headers
+        );
         $response->assertJsonValidationErrors(['start_at']);
 
-        $data = [
-            'title' => 'Спартак',
-            'start_at' => '2019-02-15',
-            'end_at' => '2019-02-28'
-        ];
+        $response = $this->json(
+            'post',
+            route('schedule.store'),
+            [
+                'title' => 'Спартак',
+                'start_at' => '2019-02-24',
+                'end_at' => '2019-02-28'
+            ],
+            $headers
+        );
+        $response->assertJsonValidationErrors(['start_at']);
 
-        $response = $this->json('post', route('schedule.store'), $data, [
-            'Content-Type' => 'application/json'
-        ]);
+        $response = $this->json(
+            'post',
+            route('schedule.store'),
+            [
+                'title' => 'Спартак',
+                'start_at' => '2019-02-15',
+                'end_at' => '2019-02-28'
+            ],
+            $headers
+        );
+        $response->assertJsonValidationErrors(['start_at']);
 
+        $response = $this->json(
+            'post',
+            route('schedule.store'),
+            [
+                'title' => 'Спартак',
+                'start_at' => '2019-02-15',
+                'end_at' => '2019-02-22'
+            ],
+            $headers
+        );
         $response->assertJsonValidationErrors(['start_at']);
     }
 
@@ -132,6 +160,34 @@ class ScheduleTest extends TestCase
             'title' => 'Ромео и Джульетта',
             'start_at' => '2019-02-19',
             'end_at' => '2019-02-22'
+        ];
+
+        $response = $this->json('post', route('schedule.store'), $data, [
+            'Content-Type' => 'application/json'
+        ]);
+
+        $response->assertJsonFragment($data);
+
+        $this->assertDatabaseHas('schedules', $data);
+
+        $data = [
+            'title' => 'Ромео и Джульетта 2',
+            'start_at' => '2019-02-23',
+            'end_at' => '2019-02-28'
+        ];
+
+        $response = $this->json('post', route('schedule.store'), $data, [
+            'Content-Type' => 'application/json'
+        ]);
+
+        $response->assertJsonFragment($data);
+
+        $this->assertDatabaseHas('schedules', $data);
+
+        $data = [
+            'title' => 'Ромео и Джульетта 0',
+            'start_at' => '2019-02-10',
+            'end_at' => '2019-02-15'
         ];
 
         $response = $this->json('post', route('schedule.store'), $data, [
